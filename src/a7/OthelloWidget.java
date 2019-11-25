@@ -493,10 +493,7 @@ public class OthelloWidget extends JPanel implements ActionListener, SpotListene
 			return;
 		}
 
-		if (spot.isEmpty()) {
-
-			spot.highlightSpot();
-		}
+		spot.highlightSpot();
 
 	}
 
