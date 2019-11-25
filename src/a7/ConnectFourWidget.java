@@ -58,9 +58,9 @@ public class ConnectFourWidget extends JPanel implements ActionListener, SpotLis
 
 	@Override
 	public void spotClicked(Spot spot) {
-		
-		Spot bottom=null;
-		
+
+		Spot bottom = null;
+
 		if (_game_won) {
 			return;
 		}
@@ -68,7 +68,7 @@ public class ConnectFourWidget extends JPanel implements ActionListener, SpotLis
 		String player_name = null;
 		String next_player_name = null;
 		Color player_color = null;
-		
+
 		if (_next_to_play == Player.RED) {
 			player_color = Color.RED;
 			player_name = "Red";
@@ -78,147 +78,188 @@ public class ConnectFourWidget extends JPanel implements ActionListener, SpotLis
 			player_color = Color.BLACK;
 			player_name = "Black";
 			next_player_name = "Red";
-			_next_to_play = Player.RED;			
+			_next_to_play = Player.RED;
 		}
-		
-		
-		for (int n=_board.getSpotHeight()-1; n>=0; n--) {
+
+		for (int n = _board.getSpotHeight() - 1; n >= 0; n--) {
 			if (_board.getSpotAt(spot.getSpotX(), n).isEmpty()) {
-			    bottom = _board.getSpotAt(spot.getSpotX(), n);
-			    bottom.setSpotColor(player_color);
+				bottom = _board.getSpotAt(spot.getSpotX(), n);
+				bottom.setSpotColor(player_color);
 				bottom.toggleSpot();
 				break;
-			}else {continue;}
+			} else {
+				continue;
+			}
 		}
-		
-        
-        // Here should do something to indicate winning.
-        // check for the vertical direction
-        for (int i=0;i < _board.getSpotHeight(); i++) {
-        	List<Spot> SpotList = new ArrayList<Spot>();
-        	Spot spotupp = _board.getSpotAt(bottom.getSpotX(), _board.getSpotHeight() - 1- i);
-        	int count = 0;
-        		if (! spotupp.isEmpty()&&(spotupp.getSpotColor()== bottom.getSpotColor())) {
-        			count ++;
-        			SpotList.add(spotupp);
-        			
-        		}else {count = 0;}
-        	if (count == 4) {
-        		_game_won = true;
-        		for (Spot each: SpotList) {
-        			each.getHighlight();
-        			
-        		}
-        	}
-        }
-        // check for horizontal direction
-        for (int j=0; j<_board.getSpotWidth();j++) {
-        	int count = 0;
-        	List<Spot> SpotList = new ArrayList<Spot>();
-        	Spot spotRight = _board.getSpotAt(j, bottom.getSpotY());
-        		if (!spotRight.isEmpty()&&spotRight.getSpotColor() == bottom.getSpotColor()) {
-        			count ++;
-        			SpotList.add(spotRight);
-        		
-        	}else {count =0;}
-        	if (count == 4) {
-        		_game_won = true;
-        		for (Spot each:SpotList) {
-        			each.getHighlight();
-        		}
-        	}
-        }
-        // check for north(south)east direction
-       
-        		
-        		Spot spotNortheast = null;
-        		 
-        		if ((bottom.getSpotX()+bottom.getSpotY())< (_board.getSpotWidth()-1)) {
-        			spotNortheast = _board.getSpotAt(bottom.getSpotX()+bottom.getSpotY(), 0);
-        			
-        		}else {
-        		
-        			spotNortheast = _board.getSpotAt(_board.getSpotWidth()-1, bottom.getSpotX()+bottom.getSpotY()-(_board.getSpotWidth()-1));
-        		}
-        		
-        		for(int x=1; x<=spotNortheast.getSpotX() - bottom.getSpotX();x++) {
-        	        	for (int y=1; y<=_board.getSpotHeight()-bottom.getSpotY();y++) {
-        		
-        	        		int count = 0;
-        	        		List<Spot> SpotList = new ArrayList<Spot>();
-        		Spot goDown = _board.getSpotAt(spotNortheast.getSpotX()-x,spotNortheast.getSpotY()+y);
-        				if ( !goDown.isEmpty()&&goDown.getSpotColor() == bottom.getSpotColor()) {
-        					count ++;
-        					SpotList.add(goDown);
-        				}else {count = 0;}
-        		if (count == 4) {
-            		_game_won = true;
-            	for (Spot each:SpotList) {
-            		each.getHighlight();
-            	}
-            	}
-        	}
-        }
-        // check for north(south)west direction
-  
-        		
-        		Spot Northwest = null;
-        		 
-        		if (bottom.getSpotX()- bottom.getSpotY()<0) {
-        			
-        			 Northwest = _board.getSpotAt(0, bottom.getSpotY()- bottom.getSpotX());
-        		}else {
-        			
-        			Northwest = _board.getSpotAt(bottom.getSpotX()- bottom.getSpotY(), 0);
-        		}
-        	      for(int x=1; x<=bottom.getSpotX() - Northwest.getSpotX();x++) {
-        	        	for (int y=1; y<=_board.getSpotHeight()-bottom.getSpotY();y++) {
-        	        		
-        	        		int count = 0;
-        	        		List<Spot> SpotList = new ArrayList<Spot>();
-        		
-        		Spot goDown = _board.getSpotAt(Northwest.getSpotX()+ x, Northwest.getSpotY()+y);
 
-        				if ((! goDown.isEmpty()&&goDown.getSpotColor() == bottom.getSpotColor())) {
-        					count ++;
-        					SpotList.add(goDown);
-        				}else {count = 0;}
-        		if (count == 4) {
-            		_game_won = true;
-            		for (Spot each:SpotList) {
-            			each.getHighlight();
-            		}
-            		
-            	}
-        	}
-        }
-       
-        
-		if (spot.isEmpty()) {
-			_message.setText( next_player_name + " to play.");
-		} else {
-			if (_game_won)  {
-				
-				_message.setText(player_name + " wins!");
-				
-				spot.unhighlightSpot();
-			}else {
-				_message.setText( next_player_name + " to play.");
+		// Here should do something to indicate winning.
+		// check for the vertical direction
+
+		List<Spot> spotList1 = new ArrayList<Spot>();
+		List<Spot> spotList2 = new ArrayList<Spot>();
+		List<Spot> spotList3 = new ArrayList<Spot>();
+		List<Spot> spotList4 = new ArrayList<Spot>();
+
+		if (bottom != null) {
+			int count = 0;
+
+			for (int i = 0; i < _board.getSpotHeight(); i++) {
+
+				Spot spotupp = _board.getSpotAt(bottom.getSpotX(), _board.getSpotHeight() - 1 - i);
+				if (!spotupp.isEmpty() && (spotupp.getSpotColor() == bottom.getSpotColor())) {
+					count++;
+					spotList1.add(spotupp);
+
+				} else {
+					count = 0;
+				}
+				if (count == 4) {
+					System.out.println(count);
+					_game_won = true;
+
+				}
 			}
+
+			// check for horizontal direction
+			int count1 = 0;
+
+			for (int j = 0; j < _board.getSpotWidth(); j++) {
+
+				Spot spotRight = _board.getSpotAt(j, bottom.getSpotY());
+				if (!spotRight.isEmpty() && spotRight.getSpotColor() == bottom.getSpotColor()) {
+					count1++;
+					spotList2.add(spotRight);
+
+				} else {
+					count1 = 0;
+				}
+				if (count1 == 4) {
+					_game_won = true;
+
+					for (Spot each : spotList2) {
+						each.highlightSpot();
+					}
+
+				}
+			}
+
+			// check for northeast(southwest) direction
+
+			Spot spotNortheast = null;
+			Spot spotSouthwest = null;
+
+			if ((bottom.getSpotX() + bottom.getSpotY()) < (_board.getSpotWidth() - 1)) {
+				spotNortheast = _board.getSpotAt(bottom.getSpotX() + bottom.getSpotY(), 0);
+				spotSouthwest = _board.getSpotAt(0, bottom.getSpotX() + bottom.getSpotY());
+
+			} else {
+
+				spotNortheast = _board.getSpotAt(_board.getSpotWidth() - 1,
+						bottom.getSpotX() + bottom.getSpotY() - (_board.getSpotWidth() - 1));
+				spotSouthwest = _board.getSpotAt(
+						spotNortheast.getSpotX() + spotNortheast.getSpotY() - (_board.getSpotHeight() - 1),
+						_board.getSpotHeight() - 1);
+
+				int count2 = 0;
+				for (int x = spotSouthwest.getSpotX(), y = spotSouthwest.getSpotY(); x <= spotNortheast.getSpotX()
+						&& y >= spotNortheast.getSpotY(); x++, y--) {
+					Spot goDown = _board.getSpotAt(x, y);
+					if (!goDown.isEmpty() && goDown.getSpotColor() == bottom.getSpotColor()) {
+						count2++;
+						spotList3.add(goDown);
+					} else {
+						count2 = 0;
+					}
+					if (count2 == 4) {
+						_game_won = true;
+						for (Spot each : spotList3) {
+							each.highlightSpot();
+						}
+
+					}
+				}
+			}
+
+			// check for southeast (northwest) direction
+
+			Spot Northwest = null;
+			Spot Southeast = null;
+
+			if (bottom.getSpotX() - bottom.getSpotY() <= 0) {
+
+				Northwest = _board.getSpotAt(0, bottom.getSpotY() - bottom.getSpotX());
+				Southeast = _board.getSpotAt(_board.getSpotHeight() - 1 - (bottom.getSpotY() - bottom.getSpotX()),
+						_board.getSpotHeight() - 1);
+			} else {
+
+				Northwest = _board.getSpotAt(bottom.getSpotX() - bottom.getSpotY(), 0);
+				Southeast = _board.getSpotAt(_board.getSpotWidth() - 1,
+						_board.getSpotWidth() - 1 - (bottom.getSpotX() - bottom.getSpotY()));
+			}
+			int count3 = 0;
+			for (int x = Northwest.getSpotX(), y = Northwest.getSpotY(); x <= Southeast.getSpotX()
+					&& y <= Southeast.getSpotY(); x++, y++) {
+
+				Spot goDown = _board.getSpotAt(x, y);
+
+				if ((!goDown.isEmpty() && goDown.getSpotColor() == bottom.getSpotColor())) {
+					count3++;
+					spotList4.add(goDown);
+				} else {
+					count3 = 0;
+				}
+
+				if (count3 == 4) {
+					_game_won = true;
+
+					for (Spot each : spotList4) {
+						each.highlightSpot();
+					}
+
+				}
+			}
+
+		}
+
+		if (spot.isEmpty()) {
+			_message.setText(next_player_name + " to play.");
 			
-			int num =0;
-			for (Spot s: _board) {
-				if (!s.isEmpty()) {
-					num++;
+		}else{
+			if (_game_won) {
+
+			_message.setText(player_name + " wins!");
+			if (spotList1.size() == 4) {
+				for (Spot each : spotList1) {
+					each.highlightSpot();
 				}
-				if (num == _board.getHeight()*_board.getWidth() && !_game_won) {
-					_message.setText("Draw game.");
-					
+			} else if (spotList2.size() == 4) {
+				for (Spot each : spotList2) {
+					each.highlightSpot();
 				}
+			} else if (spotList3.size() == 4) {
+				for (Spot each : spotList3) {
+					each.highlightSpot();
+				}
+			} else if (spotList4.size() == 4) {
+				for (Spot each : spotList4) {
+					each.highlightSpot();
+				}
+			}
+
+		} else {
+			_message.setText(player_name + " to play.");
+		}}
+
+		int num = 0;
+		for (Spot s : _board) {
+			if (!s.isEmpty()) {
+				num++;
+			}
+			if (num == _board.getHeight() * _board.getWidth() && !_game_won) {
+				_message.setText("Draw game.");
+
 			}
 		}
-		
-		
 	}
 
 	@Override
@@ -226,40 +267,41 @@ public class ConnectFourWidget extends JPanel implements ActionListener, SpotLis
 
 		if (_game_won) {
 			return;
-		}
-		Spot Hspot = null;
-		if (spot.isEmpty()) {
-			for (int y = 0; y <= spot.getSpotY() - 1; y++) {
-				Hspot = new JSpot(spot.getBackground(), spot.getSpotColor(), spot.getHighlight(), spot.getBoard(),
-						spot.getSpotX(), y);
-				Hspot.getHighlight();
+		} else {
+
+			for (int y = 0; y < _board.getSpotHeight(); y++) {
+				Spot Hspot = _board.getSpotAt(spot.getSpotX(), y);
+				if (Hspot.isEmpty()) {
+					Hspot.highlightSpot();
+				}
+
 			}
-
 		}
-
 	}
 
 	@Override
 	public void spotExited(Spot spot) {
 		if (_game_won) {
+			for (int y = 0; y < _board.getSpotHeight(); y++) {
+				Spot s = _board.getSpotAt(spot.getSpotX(), y);
+				if (s.isEmpty()) {
+					s.unhighlightSpot();
+
+				}
+			}
 			return;
 		}
 
-		Spot Uspot = null;
-		if (spot.isEmpty()) {
-			for (int y = 0; y <= spot.getSpotY() - 1; y++) {
-				Uspot = new JSpot(spot.getBackground(), spot.getSpotColor(), spot.getHighlight(), spot.getBoard(),
-						spot.getSpotX(), y);
-				Uspot.unhighlightSpot();
-			}
-
+		for (int y = 0; y < _board.getSpotHeight(); y++) {
+			Spot Uspot = _board.getSpotAt(spot.getSpotX(), y);
+			Uspot.unhighlightSpot();
 		}
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		resetGame();
 
 	}
 

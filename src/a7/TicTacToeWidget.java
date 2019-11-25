@@ -140,9 +140,6 @@ public class TicTacToeWidget extends JPanel implements ActionListener, SpotListe
 				_message.setText( next_player_name + " to play.");
 			}
 			
-			/*if(!_game_won) {
-				_message.setText("Draw game.");
-			}*/
 		}
 		int count =0;
 		for (Spot s: _board) {
